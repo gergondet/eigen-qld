@@ -33,12 +33,12 @@ jobs:
         {
           export OLD_PATH=${PATH}
           echo "PATH was ${OLD_PATH}"
-          sh_path=`which sh`
+          sh_path=`which sh || echo ""`
           while [[ "$sh_path" != "" ]]
           do
             sh_dir=`dirname $sh_path`
             export PATH=`echo $PATH|sed -e "s@:${sh_dir}@@"`
-            sh_path=`which sh`
+            sh_path=`which sh || echo ""`
           done
           echo "PATH is ${PATH}"
         }
