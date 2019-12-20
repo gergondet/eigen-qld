@@ -29,9 +29,29 @@ jobs:
       shell: bash
       run: |
         set -x
+        hide_sh()
+        {
+          export OLD_PATH=${PATH}
+          echo "PATH was ${OLD_PATH}"
+          sh_path=`which sh`
+          while [[ "$sh_path" != "" ]]
+          do
+            sh_dir=`dirname $sh_path`
+            export PATH=`echo $PATH|sed -e "s@;${sh_dir}@@"`
+            sh_path=`which sh`
+          done
+          echo "PATH is ${PATH}"
+        }
+        restore_path()
+        {
+          export PATH=${OLD_PATH}
+        }
+
         mkdir -p build
         cd build
+        hide_sh
         cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/c/devel/install
         cmake --build . --config RelWithDebInfo
         cmake --build . --target install --config RelWithDebInfo
+        restore_path
         ctest -V -C RelWithDebInfo
