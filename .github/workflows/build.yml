@@ -37,7 +37,7 @@ jobs:
           while [[ "$sh_path" != "" ]]
           do
             sh_dir=`dirname $sh_path`
-            export PATH=`echo $PATH|sed -e "s@;${sh_dir}@@"`
+            export PATH=`echo $PATH|sed -e "s@:${sh_dir}@@"`
             sh_path=`which sh`
           done
           echo "PATH is ${PATH}"
